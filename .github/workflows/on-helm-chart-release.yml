@@ -1,0 +1,138 @@
+name: On Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-staging-deployments:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: master
+
+      - name: Deploy to Staging
+        run: |
+          echo "Updating staging deployments"
+          # format is <chart-name>-<chart-version>
+          echo "Release tag: ${{ github.event.release.tag_name }}"
+
+          # extract chart name and version from tag
+          chart_name=$(echo ${{ github.event.release.tag_name }} | cut -d- -f1)
+          chart_version=$(echo ${{ github.event.release.tag_name }} | cut -d- -f2)
+
+          # Search for any application using the chart name
+          # and update the targetRevision to the new version
+
+          for file in $(find kubernetes -path "kubernetes/*/*/*/staging/*/" -name application.yaml); do
+            if grep -q "chart: $chart_name" $file; then
+              echo "Updating $file"
+              sed -i "s/targetRevision: .*/targetRevision: $chart_version/" $file
+            fi
+          done
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.email "[email protected]"
+          git config --global user.name "GitHub Actions"
+          git add kubernetes
+          git commit -m "Update staging deployments"
+          git push
+
+
+      # The code below is purely illustrative of how CI/CD would work in a real-world scenario
+
+      # - name: Wait for sync by checking ArgoCD API
+      #   run: |
+      #       echo "Waiting for ArgoCD to sync"
+      #       # Wait for ArgoCD to sync by checking the application status
+      #       # This is a simple way to check if the sync is done
+      #       # You can also use the ArgoCD API to check the sync status
+      #       # https://argoproj.github.io/argo-cd/user-guide/api-docs/
+      #       start_time=$(date +%s)
+      #       while true; do
+      #       status=$(kubectl get app speckle-server -n argocd -o jsonpath='{.status.sync.status}')
+      #       health=$(kubectl get app speckle-server -n argocd -o jsonpath='{.status.health.status}')
+      #       if [ "$status" == "Synced" ] && [ "$health" == "Healthy" ]; then
+      #         echo "Synced and Healthy"
+      #         break
+      #       fi
+      #       current_time=$(date +%s)
+      #       elapsed_time=$((current_time - start_time))
+      #       if [ $elapsed_time -ge 300 ]; then
+      #         echo "Sync failed or not healthy after 5 minutes"
+      #         exit 1
+      #       fi
+      #       echo "Waiting for sync and health..."
+      #       sleep 10
+      #       done
+
+      #       echo "Sync done and application is healthy"
+      
+      # - name: Deploy to Production
+      #   run: |
+      #     echo "Updating staging deployments"
+      #     # format is <chart-name>-<chart-version>
+      #     echo "Release tag: ${{ github.event.release.tag_name }}"
+
+      #     # extract chart name and version from tag
+      #     chart_name=$(echo ${{ github.event.release.tag_name }} | cut -d- -f1)
+      #     chart_version=$(echo ${{ github.event.release.tag_name }} | cut -d- -f2)
+          
+      #     # Search for any application using the chart name
+      #     # and update the targetRevision to the new version
+
+      #     for file in $(find kubernetes -path "kubernetes/*/*/*/production/*/" -name application.yaml); do
+      #       if grep -q "chart: $chart_name" $file; then
+      #         echo "Updating $file"
+      #         sed -i "s/targetRevision: .*/targetRevision: $chart_version/" $file
+      #       fi
+      #     done
+
+      # - name: Commit and push changes
+      #   run: |
+      #     git config --global user.email "[email protected]"
+      #     git config --global user.name "GitHub Actions"
+      #     git add kubernetes
+      #     git commit -m "Update production deployments"
+      #     git push
+
+      # - name: Wait for sync by checking ArgoCD API
+      #   run: |
+      #       echo "Waiting for ArgoCD to sync"
+      #       # Wait for ArgoCD to sync by checking the application status
+      #       # This is a simple way to check if the sync is done
+      #       # You can also use the ArgoCD API to check the sync status
+      #       # https://argoproj.github.io/argo-cd/user-guide/api-docs/
+      #       start_time=$(date +%s)
+      #       while true; do
+      #       status=$(kubectl get app speckle-server -n argocd -o jsonpath='{.status.sync.status}')
+      #       health=$(kubectl get app speckle-server -n argocd -o jsonpath='{.status.health.status}')
+      #       if [ "$status" == "Synced" ] && [ "$health" == "Healthy" ]; then
+      #         echo "Synced and Healthy"
+      #         break
+      #       fi
+      #       current_time=$(date +%s)
+      #       elapsed_time=$((current_time - start_time))
+      #       if [ $elapsed_time -ge 300 ]; then
+      #         echo "Sync failed or not healthy after 5 minutes"
+      #         exit 1
+      #       fi
+      #       echo "Waiting for sync and health..."
+      #       sleep 10
+      #       done
+
+      #       echo "Sync done and application is healthy"
+
+      # # If any failure occurs send a message to slack
+      # - name: Notify on failure
+      #   if: failure()
+      #   run: |
+      #     curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment failed"}' ${{ secrets.SLACK_WEBHOOK }}
+      
+      # - name: Notify on success
+      #   if: success()
+      #   run: |
+      #     curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment successful"}' ${{ secrets.SLACK_WEBHOOK }}
