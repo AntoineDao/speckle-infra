@@ -12,7 +12,12 @@ spec:
     repoURL: https://antoinedao.github.io/speckle-infra
     targetRevision: 0.1.5
     helm:
-      valuesObject: {}
+      valuesObject:
+        secretName: speckle-server-secrets
+        redis:
+          enabled: true
+        postgresql:
+          enabled: true
 
 
   destination:
