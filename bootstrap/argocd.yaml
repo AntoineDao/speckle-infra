@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: speckle-infrastructure
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: https://github.com/antoinedao/speckle-infra
+      revision: HEAD
+      directories:
+      # path template "kubernetes/<app-name>/<cloud-provider>/<region>/<env>/<namespace>"
+      # path[0] = kubernetes
+      # path[1] = app-name
+      # path[2] = cloud-provider
+      # path[3] = region
+      # path[4] = env
+      # path[5] = namespace
+      - path: kubernetes/*/*/*/*/*
+
+  template:
+    metadata:
+      # name: '{{ index .path.segments 1 }}'
+      name: '{{ index .path.segments 1 }}-{{ index .path.segments 2 }}-{{ index .path.segments 3 }}-{{ index .path.segments 4 }}'
+      # namespace: '{{ index .path.segments 5 }}'
+      namespace: '{{ .path.basename}}'
+    spec:
+      project: "default"
+      source:
+        repoURL: https://github.com/antoinedao/speckle-infra
+        targetRevision: HEAD
+        path: '{{ .path.path }}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{ .path.basename}}'
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
