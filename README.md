@@ -48,6 +48,8 @@ The configuration in this repository allows for the deployment of the Speckle se
 
 In order for the Speckle server to communicate with services running in other kubernetes clusters we would have to set up a secure connection between these services. Unfortunately Digital Ocean does not have any readily available VPN services available (that I know of...) so the next best solution will be to get services to communicate accross clusters through the public internet but using mTLS (mutual TLS) to authenticate and encrypt communication between the services. We could use Istio to achieve this (maybe a bit overkill), targetted proxy sidecars or just build in certificate management into the services themselves.
 
+<img width="1320" alt="image" src="https://github.com/user-attachments/assets/5b2d8b88-6147-4f33-b238-c6cc44753f95" />
+
 Deploying to other cloud providers would also allow us to make use of different node types (with GPUs or running Windows). 
 
 Given the existing mono-helm-chart structure in specklesystems/speckle-server we would have to refactor the chart into multiple independent charts. This would allow us 
