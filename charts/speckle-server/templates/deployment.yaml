@@ -1,0 +1,130 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "speckle-server.fullname" . }}
+  labels:
+    {{- include "speckle-server.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "speckle-server.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "speckle-server.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "speckle-server.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+        env:
+          - name: PORT
+            value: {{ .Values.service.port | quote }}
+          {{- include "speckle-server.deploymentEnv" $ | indent 10 -}}
+
+        startupProbe:
+          periodSeconds: 10
+          failureThreshold: 60 # 10*60 = 600s; accounts for long-running db migrations
+          timeoutSeconds: 3
+          httpGet:
+            path: /liveness
+            port:  {{ .Values.service.port }}
+
+        livenessProbe:
+          periodSeconds: 60
+          timeoutSeconds: 10
+          failureThreshold: 3
+          httpGet:
+            path: /liveness
+            port:  {{ .Values.service.port }}
+
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 4
+          timeoutSeconds: 2
+          failureThreshold: 1
+          httpGet:
+            path: /readiness
+            port:  {{ .Values.service.port }}
+
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+            {{- if .Values.global.featureFlags.automateModule.enabled }}
+              - name: encryption-keys
+                readOnly: true
+                mountPath: /encryption-keys
+            {{- end }}
+            {{- if .Values.global.featureFlags.workspacesMultiRegion.enabled }}
+              - name: multi-region-config
+                mountPath: /multi-region-config
+                readOnly: true
+            {{- end }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        {{- if .Values.global.featureFlags.automateModule.enabled }}
+        - name: encryption-keys
+          secret:
+            secretName: encryption-keys
+        {{- end }}
+        {{- if .Values.global.featureFlags.workspacesMultiRegion.enabled }}
+        - name: multi-region-config
+          secret:
+            secretName: {{ .Values.multiRegion.config.secretName }}
+            items:
+            - key: {{ .Values.multiRegion.config.secretKey }}
+              path: "multi-region-config.json"
+        {{- end }}
+        # Additional volumes from Helm chart values
+        {{- toYaml . | nindent 8 }}
+
+      {{- end }}
+      {{- with .Values.priorityClassName -}}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
