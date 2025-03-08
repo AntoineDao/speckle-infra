@@ -23,7 +23,7 @@ jobs:
 
           # extract chart name and version from tag
           chart_name=$(echo ${{ github.event.release.tag_name }} | cut -d- -f1)
-          chart_version=$(echo ${{ github.event.release.tag_name }} | cut -d- -f2)
+          chart_version=$(echo ${{ github.event.release.tag_name }} | awk -F'-' '{print $NF}')
 
           # Search for any application using the chart name
           # and update the targetRevision to the new version
