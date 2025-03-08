@@ -74,6 +74,13 @@ An ApplicationSet in the `bootstrap` directory will create ArgoCD applications f
 
 Anything in the folder will be deployed, it could be raw Kubernetes objects, ArgoCD applications, Helm charts or Kustomize overlays. The `ApplicationSet` will look at the folder structure and create ArgoCD applications based on the parameters in the folder structure.
 
+<img width="1320" alt="image" src="https://github.com/user-attachments/assets/90789185-7346-4f52-ada5-f2fbf493615b" />
+<img width="1320" alt="image" src="https://github.com/user-attachments/assets/ec7443d5-c93f-48d2-8e0d-f3aec34ffa7d" />
+<img width="1467" alt="image" src="https://github.com/user-attachments/assets/da020e02-ac1a-4528-89a2-957d5dd13db7" />
+<img width="1467" alt="image" src="https://github.com/user-attachments/assets/d08c73e8-3be6-4be5-bf35-2e992cf4be71" />
+<img width="1467" alt="image" src="https://github.com/user-attachments/assets/bbd7246e-0a63-4415-a536-d4d86dd74166" />
+
+
 ### Terraform
 Terraform is used to set up the GKE cluster and the initial ArgoCD deployment. We use Terraform to manage the infrastructure and the ArgoCD configuration. We use the `terraform` directory to store the Terraform code.
 
