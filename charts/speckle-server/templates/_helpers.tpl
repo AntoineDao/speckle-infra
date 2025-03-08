@@ -268,7 +268,7 @@ Generate the environment variables for Speckle server and Speckle objects deploy
 - name: REDIS_URL
   valueFrom:
     secretKeyRef:
-      name: {{ default .Values.secretName .Values.redis.connectionString.secretName }}
+      name: {{ .Values.secretName  }}
       key: {{ default "redis_url" .Values.redis.connectionString.secretKey }}
 
 
@@ -276,7 +276,7 @@ Generate the environment variables for Speckle server and Speckle objects deploy
 - name: PREVIEW_SERVICE_REDIS_URL
   valueFrom:
     secretKeyRef:
-      name: {{ default .Values.secretName .Values.redis.previewServiceConnectionString.secretName }}
+      name: {{ .Values.secretName .Values.redis.previewServiceConnectionString.secretName }}
       key: {{ default "preview_service_redis_url" .Values.redis.previewServiceConnectionString.secretKey }}
 {{- end }}
 
@@ -284,8 +284,9 @@ Generate the environment variables for Speckle server and Speckle objects deploy
 - name: POSTGRES_URL
   valueFrom:
     secretKeyRef:
-      name: {{ default .Values.secretName .Values.db.connectionString.secretName }}
+      name: {{ .Values.secretName }}
       key: {{ default "postgres_url" .Values.db.connectionString.secretKey }}
+      
 - name: POSTGRES_MAX_CONNECTIONS_SERVER
   value: {{ .Values.db.maxConnectionsServer | quote }}
 - name: POSTGRES_CONNECTION_CREATE_TIMEOUT_MILLIS
@@ -347,7 +348,7 @@ Generate the environment variables for Speckle server and Speckle objects deploy
 - name: S3_SECRET_KEY
   valueFrom:
     secretKeyRef:
-      name: {{ default .Values.secretName .Values.s3.secret_key.secretName }}
+      name: {{ .Values.secretName }}
       key: {{ default "s3_secret_key" .Values.s3.secret_key.secretKey }}
 - name: S3_CREATE_BUCKET
   value: "{{ .Values.s3.create_bucket }}"
