@@ -133,7 +133,7 @@ Generate the environment variables for Speckle server and Speckle objects deploy
   value: {{ .Values.global.featureFlags.workspacesMultiRegion.enabled | quote }}
 
 - name: FF_FORCE_ONBOARDING
-  value: {{ .Values.global.featureFlags.forceOnboarding | quote }}
+  value: {{ .Values.global.featureFlags.forceOnboarding.enabled | quote }}
 
 {{- if .Values.global.featureFlags.billingIntegration.enabled }}
 - name: STRIPE_API_KEY
