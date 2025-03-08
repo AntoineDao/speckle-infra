@@ -10,7 +10,7 @@ spec:
   source:
     chart: speckle-server
     repoURL: https://antoinedao.github.io/speckle-infra
-    targetRevision: 0.1.7
+    targetRevision: 0.1.8
     helm:
       valuesObject:
         secretName: speckle-server-secrets
