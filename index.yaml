@@ -189,4 +189,22 @@ entries:
     urls:
     - https://github.com/AntoineDao/speckle-infra/releases/download/speckle-server-0.1.0/speckle-server-0.1.0.tgz
     version: 0.1.0
-generated: "2025-03-08T20:26:06.385322933Z"
+  speckle-server-original:
+  - apiVersion: v2
+    appVersion: 0.1.0-local
+    created: "2025-03-08T21:10:22.779046672Z"
+    description: Speckle Server
+    digest: 7024fb581133fc2a5c24dab3fb05b73750ce5796a787bc09a67a92c844a9586a
+    home: https://speckle.systems/
+    icon: https://app.speckle.systems/images/logo.png
+    maintainers:
+    - name: Speckle Systems
+      url: https://speckle.systems/
+    name: speckle-server-original
+    sources:
+    - https://github.com/specklesystems/speckle-server
+    type: application
+    urls:
+    - https://github.com/AntoineDao/speckle-infra/releases/download/speckle-server-original-0.1.0/speckle-server-original-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-03-08T21:10:22.779087638Z"
