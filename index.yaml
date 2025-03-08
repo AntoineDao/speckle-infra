@@ -1,0 +1,21 @@
+apiVersion: v1
+entries:
+  speckle-server:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-03-08T12:10:04.959253408Z"
+    dependencies:
+    - name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.16
+    - name: redis
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 20.11.2
+    description: A Helm chart for Kubernetes
+    digest: 4945043d784781db0f847fe3d6df576c04b2d92ff57ccdff3478f6cee883196f
+    name: speckle-server
+    type: application
+    urls:
+    - https://github.com/AntoineDao/speckle-infra/releases/download/speckle-server-0.1.0/speckle-server-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-03-08T12:10:04.959258007Z"
