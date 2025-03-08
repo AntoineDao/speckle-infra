@@ -120,6 +120,7 @@ postgresql:
 
 redis:
   enabled: false
+  architecture: standalone
   connectionString: {}
 
 secretName: speckle-server
