@@ -16,6 +16,8 @@ spec:
         secretName: speckle-server-secrets
         redis:
           enabled: true
+          replica:
+            replicaCount: 1
         postgresql:
           enabled: true
 
