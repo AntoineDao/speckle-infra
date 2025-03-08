@@ -101,6 +101,30 @@ global:
     workspacesNewPlan:
       enabled: false
 
+
+postgresql:
+  enabled: true
+  postgresqlUsername: speckle
+  postgresqlPassword: speckle
+  postgresqlDatabase: speckle
+  service:
+    port: 5432
+  persistence:
+    enabled: true
+    size: 8Gi
+    accessMode: ReadWriteOnce
+    storageClass: ""
+
+redis:
+  enabled: true
+  usePassword: false
+  password: ""
+  persistence:
+    enabled: true
+    size: 8Gi
+    accessMode: ReadWriteOnce
+    storageClass: ""
+
 serverConfig:
   
   ## @param server.logLevel The minimum level of logs which will be output. Suitable values are trace, debug, info, warn, error, fatal, or silent
