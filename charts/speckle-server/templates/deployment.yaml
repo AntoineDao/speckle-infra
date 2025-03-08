@@ -44,35 +44,35 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-        env:
+          env:
           - name: PORT
             value: {{ .Values.service.port | quote }}
-          {{- include "speckle-server.deploymentEnv" $ | indent 10 -}}
+{{ include "speckle-server.deploymentEnv" $ | indent 10 }}
 
-        startupProbe:
-          periodSeconds: 10
-          failureThreshold: 60 # 10*60 = 600s; accounts for long-running db migrations
-          timeoutSeconds: 3
-          httpGet:
-            path: /liveness
-            port:  {{ .Values.service.port }}
+      startupProbe:
+        periodSeconds: 10
+        failureThreshold: 60 # 10*60 = 600s; accounts for long-running db migrations
+        timeoutSeconds: 3
+        httpGet:
+          path: /liveness
+          port:  {{ .Values.service.port }}
 
-        livenessProbe:
-          periodSeconds: 60
-          timeoutSeconds: 10
-          failureThreshold: 3
-          httpGet:
-            path: /liveness
-            port:  {{ .Values.service.port }}
+      livenessProbe:
+        periodSeconds: 60
+        timeoutSeconds: 10
+        failureThreshold: 3
+        httpGet:
+          path: /liveness
+          port:  {{ .Values.service.port }}
 
-        readinessProbe:
-          initialDelaySeconds: 5
-          periodSeconds: 4
-          timeoutSeconds: 2
-          failureThreshold: 1
-          httpGet:
-            path: /readiness
-            port:  {{ .Values.service.port }}
+      readinessProbe:
+        initialDelaySeconds: 5
+        periodSeconds: 4
+        timeoutSeconds: 2
+        failureThreshold: 1
+        httpGet:
+          path: /readiness
+          port:  {{ .Values.service.port }}
 
           {{- with .Values.resources }}
           resources:

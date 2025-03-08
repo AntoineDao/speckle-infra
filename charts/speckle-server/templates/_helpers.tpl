@@ -81,7 +81,7 @@ Generate the environment variables for Speckle server and Speckle objects deploy
 {{- end }}
 
 - name: PORT
-  value: {{ include "server.port" $ | quote }}
+  value: {{ .Values.service.port | quote }}
 - name: LOG_LEVEL
   value: {{ .Values.server.logLevel }}
 - name: LOG_PRETTY

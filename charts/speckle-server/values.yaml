@@ -101,9 +101,12 @@ global:
     workspacesNewPlan:
       enabled: false
 
+    workspacesSso:
+      enabled: false
+
 
 postgresql:
-  enabled: true
+  enabled: false
   postgresqlUsername: speckle
   postgresqlPassword: speckle
   postgresqlDatabase: speckle
@@ -116,7 +119,7 @@ postgresql:
     storageClass: ""
 
 redis:
-  enabled: true
+  enabled: false
   usePassword: false
   password: ""
   persistence:
@@ -124,8 +127,14 @@ redis:
     size: 8Gi
     accessMode: ReadWriteOnce
     storageClass: ""
+  connectionString:
+    secretName: ""
+    secretKey: ""
+  previewServiceConnectionString:
+    secretName: ""
+    secretKey: ""
 
-serverConfig:
+server:
   
   ## @param server.logLevel The minimum level of logs which will be output. Suitable values are trace, debug, info, warn, error, fatal, or silent
   ##
@@ -136,6 +145,155 @@ serverConfig:
   ## @param server.enableFe2Messaging If enabled, the related FE1 deployment will show banners/messages about the new frontend
   ##
   enableFe2Messaging: false
+  onboarding:
+    stream_url: ""
+    stream_cache_bust_number: ""
+  sessionSecret:
+    secretName: ""
+    secretKey: ""
+  fileUploads:
+    enabled: false
+  adminOverride:
+    enabled: false
+  weeklyDigest:
+    enabled: false
+  monitoring:
+    mp:
+      enabled: false
+    apollo:
+      enabled: false
+      graph_id: ""
+      key:
+        secretName: ""
+        secretKey: ""
+  ratelimiting:
+    enabled: false
+    all_requests: ""
+    burst_all_requests: ""
+    user_create: ""
+    burst_user_create: ""
+    stream_create: ""
+    burst_stream_create: ""
+    commit_create: ""
+    burst_commit_create: ""
+    post_getobjects_streamid: ""
+    burst_post_getobjects_streamid: ""
+    post_diff_streamid: ""
+    burst_post_diff_streamid: ""
+    post_objects_streamid: ""
+    burst_post_objects_streamid: ""
+    get_objects_streamid_objectid: ""
+    burst_get_objects_streamid_objectid: ""
+    get_objects_streamid_objectid_single: ""
+    burst_get_objects_streamid_objectid_single: ""
+    post_graphql: ""
+    burst_post_graphql: ""
+    get_auth: ""
+    burst_get_auth: ""
+  file_size_limit_mb: 100
+  max_project_models_per_page: 50
+  max_object_size_mb: 50
+  max_object_upload_file_size_mb: 50
+  migration:
+    movedFrom: ""
+    movedTo: ""
+  asyncRequestContext:
+    enabled: false
+  auth:
+    local:
+      enabled: false
+    google:
+      enabled: false
+      client_id: ""
+      clientSecret:
+        secretName: ""
+        secretKey: ""
+    github:
+      enabled: false
+      client_id: ""
+      clientSecret:
+        secretName: ""
+        secretKey: ""
+    azure_ad:
+      enabled: false
+      org_name: ""
+      identity_metadata: ""
+      issuer: ""
+      client_id: ""
+      clientSecret:
+        secretName: ""
+        secretKey: ""
+    oidc:
+      enabled: false
+      name: ""
+      discovery_url: ""
+      client_id: ""
+      clientSecret:
+        secretName: ""
+        secretKey: ""
+  email:
+    enabled: false
+    host: ""
+    port: 587
+    username: ""
+    password:
+      secretName: ""
+      secretKey: ""
+    from: ""
+  tlsRejectUnauthorized: true
+  preview_service:
+    dedicatedPreviewsQueue: false
+  openTelemetry:
+    tracing:
+      url: ""
+      key: ""
+      value: ""
+
+db:
+  connectionString:
+    secretName: ""
+    secretKey: ""
+  maxConnectionsServer: 10
+  connectionCreateTimeoutMillis: 30000
+  connectionAcquireTimeoutMillis: 30000
+  knexAsyncStackTraces:
+    enabled: false
+  knexImprovedTelemetryStackTraces: false
+  PGSSLMODE: "disable"
+  useCertificate: false
+
+s3:
+  configMap:
+    enabled: false
+  endpoint: ""
+  access_key: ""
+  bucket: ""
+  secret_key:
+    secretName: ""
+    secretKey: ""
+  create_bucket: false
+  region: ""
+
+email:
+  enabled: false
+  host: ""
+  port: 587
+  username: ""
+  password:
+    secretName: ""
+    secretKey: ""
+  from: ""
+
+tlsRejectUnauthorized: true
+
+preview_service:
+  dedicatedPreviewsQueue: false
+
+openTelemetry:
+  tracing:
+    url: ""
+    key: ""
+    value: ""
 
 
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
