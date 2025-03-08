@@ -55,6 +55,13 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 You can then login to the ArgoCD dashboard by visiting `localhost:8080` and using the username `admin` and the password you got earlier.
 
 
+### Tear Down
+To tear down the infrastructure, run the following command:
+
+```bash
+cd terraform
+terraform destroy
+```
 
 ## Architecture
 
