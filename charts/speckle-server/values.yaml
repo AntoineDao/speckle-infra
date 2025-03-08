@@ -120,19 +120,8 @@ postgresql:
 
 redis:
   enabled: false
-  usePassword: false
-  password: ""
-  persistence:
-    enabled: true
-    size: 8Gi
-    accessMode: ReadWriteOnce
-    storageClass: ""
-  connectionString:
-    secretName: ""
-    secretKey: ""
-  previewServiceConnectionString:
-    secretName: ""
-    secretKey: ""
+
+secretName: speckle-server
 
 server:
   
@@ -146,8 +135,8 @@ server:
   ##
   enableFe2Messaging: false
   onboarding:
-    stream_url: ""
-    stream_cache_bust_number: ""
+    stream_url: 'https://latest.speckle.systems/projects/843d07eb10'
+    stream_cache_bust_number: 1
   sessionSecret:
     secretName: ""
     secretKey: ""
