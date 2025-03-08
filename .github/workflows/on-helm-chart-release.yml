@@ -26,7 +26,7 @@ jobs:
           # Search for any application using the chart name
           # and update the targetRevision to the new version
 
-          for file in $(find kubernetes -path "kubernetes/*/*/*/staging/*/" -name application.yaml); do
+          for file in $(find kubernetes -path "kubernetes/*/*/*/staging/*" -name application.yaml); do
             if grep -q "chart: $chart_name" $file; then
               echo "Updating $file"
               sed -i "s/targetRevision: .*/targetRevision: $chart_version/" $file
